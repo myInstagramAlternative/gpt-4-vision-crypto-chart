@@ -7,10 +7,11 @@ from io import BytesIO
 # OpenAI API Key
 api_key = ""
 
+
 class Conversation:
     def __init__(self, api_key, model="gpt-4-vision-preview", max_tokens=500):
         """
-        Initializes the API client with the provided API key, model name, and maximum number of tokens. 
+        Initializes the API client with the provided API key, model name, and maximum number of tokens.
 
         Parameters:
             - api_key (str): The API key used to authenticate the client.
@@ -41,8 +42,6 @@ class Conversation:
         self.payload = self.initial_payload
 
     def get_encoded_image_from_clipboard(self):
-        
-
         # Grab the image from the clipboard
         image = ImageGrab.grabclipboard()
 
@@ -68,7 +67,9 @@ class Conversation:
         else:
             raise Exception("No image data is found in the clipboard.")
 
-    def submit_chart(self, instruction="Perform Technical analysis based off of this chart."):
+    def submit_chart(
+        self, instruction="Perform Technical analysis based off of this chart."
+    ):
         self.payload["messages"].append(
             {
                 "role": "user",
