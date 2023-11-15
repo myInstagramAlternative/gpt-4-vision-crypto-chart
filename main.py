@@ -28,7 +28,8 @@ class Conversation:
         }
         self.model = model
         self.max_tokens = max_tokens
-        self.system_instruction = "You are a helpful crypto trader assistant. You will be given a chart and asked to perform technical analysis. On image you will have chart with 50 and 200 MA, under chart you will have volume and bellow it RSI. Try to recognize patterns which can tell where price will go. Keep it short, concise and to the point. Short term should I short or long futures or not enter at the moment?"
+        # self.system_instruction = "You are a helpful crypto trader assistant. You will be given a chart and asked to perform technical analysis. On image you will have chart with 50 and 200 MA, under chart you will have volume and bellow it RSI. Try to recognize patterns which can tell where price will go. Keep it short, concise and to the point. Short term should I short or long futures or not enter at the moment?"
+        self.system_instruction = "You are a helpful crypto trader assistant. Given the chart with a 50 and 200 MA displayed, under the chart, you will find the volume, and below that, the RSI. Analyze the chart for patterns indicating the potential direction of the price. Keep your analysis short, concise, and to the point. Should I consider shorting or longing futures in the short term, or is it better to stay out of the market for now?"
         self.initial_payload = {
             "model": self.model,
             "messages": [
@@ -42,6 +43,16 @@ class Conversation:
         self.payload = self.initial_payload
 
     def get_encoded_image_from_clipboard(self):
+        """
+        Retrieves an encoded image from the clipboard.
+
+        Returns:
+            str: The base64-encoded string representation of the image retrieved from the clipboard.
+
+        Raises:
+            Exception: If no image data is found in the clipboard.
+        """
+        
         # Grab the image from the clipboard
         image = ImageGrab.grabclipboard()
 
@@ -70,6 +81,16 @@ class Conversation:
     def submit_chart(
         self, instruction="Perform Technical analysis based off of this chart."
     ):
+        """
+        Submit a chart for performing technical analysis.
+
+        Parameters:
+            instruction (str): Optional. The instruction for the technical analysis. Defaults to "Perform Technical analysis based off of this chart.".
+
+        Returns:
+            None
+        """
+
         self.payload["messages"].append(
             {
                 "role": "user",
@@ -112,6 +133,8 @@ class Conversation:
             )
             print(msg + "\n")
             new_msg = input("Enter your response: ")
+            if new_msg == "q" or new_msg == "exit":
+                exit(0)
             if new_msg == "chart":
                 new_msg = input("Chart instruction: ")
                 self.submit_chart(new_msg)
@@ -126,5 +149,4 @@ class Conversation:
             self.handler()
 
 
-conversation = Conversation(api_key)
-conversation.handler()
+Conversation(api_key).handler()
